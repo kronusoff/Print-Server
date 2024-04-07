@@ -1,0 +1,22 @@
+﻿<Window x:Class="Print_Server.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Print Server" Height="450" Width="800">
+    <Grid>
+        <!-- Элементы интерфейса -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <!-- Кнопки с отступами между ними -->
+            <Button Content="Добавить принтер" Click="AddPrinter_Click"/>
+            <Button Content="Удалить принтер" Click="RemovePrinter_Click" Margin="10,0,10,0"/>
+            <Button Content="Настройки" Click="Settings_Click"/>
+        </StackPanel>
+        <!-- Список принтеров -->
+        <ListBox x:Name="PrintersListBox" Grid.Row="1" Margin="10" Background="#ECEFF1" BorderThickness="1" BorderBrush="#B0BEC5" MouseDoubleClick="PrintersListBox_MouseDoubleClick">
+            <!-- Элементы списка -->
+        </ListBox>
+    </Grid>
+</Window>
