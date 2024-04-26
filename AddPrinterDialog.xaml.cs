@@ -26,7 +26,7 @@ namespace Print_Server
             }
             else
             {
-                MessageBox.Show("Выберите принтер из списка.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Select a printer from the list.\r\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

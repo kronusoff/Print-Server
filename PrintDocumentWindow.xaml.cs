@@ -60,14 +60,14 @@ namespace Print_Server
 
             if (!File.Exists(filePath))
             {
-                MessageBox.Show("Файл не найден.");
+                MessageBox.Show("The file was not found.\r\n");
                 return;
             }
 
             string extension = Path.GetExtension(filePath);
             if (!IsSupportedFileExtension(extension))
             {
-                MessageBox.Show("Неподдерживаемое расширение файла.");
+                MessageBox.Show("Unsupported file extension.\r\n");
                 return;
             }
 
@@ -91,7 +91,7 @@ namespace Print_Server
             }
             catch (System.Exception ex)
             {
-                System.Windows.MessageBox.Show($"Ошибка при печати файла: {ex.Message}");
+                System.Windows.MessageBox.Show($"Error printing the file\r\n: {ex.Message}");
             }
         }
     }

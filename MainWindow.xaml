@@ -10,9 +10,10 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
             <!-- Кнопки с отступами между ними -->
-            <Button Content="Добавить принтер" Click="AddPrinter_Click"/>
-            <Button Content="Удалить принтер" Click="RemovePrinter_Click" Margin="10,0,10,0"/>
-            <Button Content="Настройки" Click="Settings_Click"/>
+            <Button Content="Add Printer" Click="AddPrinter_Click"/>
+            <Button Content="Delete the printer
+" Click="RemovePrinter_Click" Margin="10,0,10,0"/>
+            <Button Content="Settings" Click="Settings_Click"/>
         </StackPanel>
         <!-- Список принтеров -->
         <ListBox x:Name="PrintersListBox" Grid.Row="1" Margin="10" Background="#ECEFF1" BorderThickness="1" BorderBrush="#B0BEC5" MouseDoubleClick="PrintersListBox_MouseDoubleClick">

@@ -41,7 +41,7 @@ namespace Print_Server
             }
             else
             {
-                MessageBox.Show("Не выбран принтер!");
+                MessageBox.Show("The printer is not selected!\r\n");
             }
         }
  private void RemovePrinter_Click(object sender, RoutedEventArgs e)
@@ -53,13 +53,23 @@ namespace Print_Server
             }
             else
             {
-                MessageBox.Show("Выберите принтер из списка для удаления.");
+                MessageBox.Show("Select the printer from the list to delete.\r\n");
             }
         }
 
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
+            // Создаем экземпляр окна Settings
+            SettingsWindow settingsWindow = new SettingsWindow();
+
+            // Отображаем окно как модальное (ShowDialog())
+            settingsWindow.ShowDialog();
+
+            // Если окно Settings закрывается, программа будет продолжена с этой строки
+            // Если вам нужно выполнять какие-либо действия после закрытия окна Settings,
+            // поместите их здесь
         }
+
     }
 }

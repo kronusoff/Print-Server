@@ -11,16 +11,16 @@
         </Grid.RowDefinitions>
 
         <!-- Заголовок -->
-        <TextBlock Text="Выберите файл для печати:" Margin="10" FontSize="16"/>
+        <TextBlock Text="Select the file to print:" Margin="10" FontSize="16"/>
 
         <!-- TextBox для отображения выбранного файла -->
         <TextBox x:Name="FilePathTextBox" Grid.Row="1" Margin="10" IsReadOnly="True" HorizontalAlignment="Stretch"/>
 
         <!-- Кнопка для выбора файла -->
-        <Button Content="Обзор..." Grid.Row="1" Margin="10,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BrowseButton_Click"/>
+        <Button Content="Review..." Grid.Row="1" Margin="10,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="BrowseButton_Click"/>
 
         <!-- Кнопка для начала печати -->
-        <Button Content="Печать" Grid.Row="2" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="PrintButton_Click"/>
+        <Button Content="Print" Grid.Row="2" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="PrintButton_Click"/>
 
         <!-- Прогрессбар для индикации загрузки -->
         <ProgressBar Grid.Row="3" Height="20" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top" IsIndeterminate="True" Visibility="Collapsed"/>
