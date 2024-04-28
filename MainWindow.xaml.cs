@@ -28,23 +28,21 @@ namespace Print_Server
 
         private void PrintersListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // Получаем выбранный принтер из ListBox
             ListBoxItem selectedItem = PrintersListBox.SelectedItem as ListBoxItem;
 
             if (selectedItem != null)
             {
                 string selectedPrinter = selectedItem.Content.ToString();
-
-                // Создаем новое окно для загрузки документа для печати
                 PrintDocumentWindow printDocumentWindow = new PrintDocumentWindow(selectedPrinter);
-                printDocumentWindow.ShowDialog(); // Отображаем окно
+                printDocumentWindow.ShowDialog();
             }
             else
             {
                 MessageBox.Show("The printer is not selected!\r\n");
             }
         }
- private void RemovePrinter_Click(object sender, RoutedEventArgs e)
+
+        private void RemovePrinter_Click(object sender, RoutedEventArgs e)
         {
             if (PrintersListBox.SelectedItem != null)
             {

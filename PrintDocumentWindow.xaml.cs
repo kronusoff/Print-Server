@@ -4,6 +4,8 @@ using Microsoft.Win32;
 using System.Printing;
 using System.Linq;
 using System.IO;
+using System.Windows.Xps;
+using System.Windows.Xps.Packaging;
 
 namespace Print_Server
 {
@@ -84,15 +86,37 @@ namespace Print_Server
         {
             try
             {
-                System.Drawing.Printing.PrintDocument printDoc = new System.Drawing.Printing.PrintDocument();
-                printDoc.PrinterSettings.PrinterName = printerName;
+                PrintQueue printQueue = new PrintServer().GetPrintQueue(printerName);
+                if (printQueue == null)
+                {
+                    MessageBox.Show("Printer not found.");
+                    return;
+                }
 
-                printDoc.Print();
+                // Открываем и читаем содержимое файла
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+                {
+                    // Создаем задание на печать
+                    PrintSystemJobInfo printJob = printQueue.AddJob();
+
+                    // Получаем поток для записи данных в задание на печать
+                    Stream printStream = printJob.JobStream;
+
+                    // Копируем содержимое файла в поток задания на печать
+                    fileStream.CopyTo(printStream);
+
+                    // Закрываем поток задания на печать
+                    printStream.Close();
+                }
+
+                MessageBox.Show("File added to print queue successfully.");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Error printing the file\r\n: {ex.Message}");
+                MessageBox.Show($"Error adding file to print queue: {ex.Message}");
             }
         }
+
     }
 }
+
