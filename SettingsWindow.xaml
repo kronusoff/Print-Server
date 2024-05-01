@@ -11,18 +11,18 @@
             <Label Content="Print Settings
 :" FontWeight="Bold"/>
             <Label Content="Quality:"/>
-            <ComboBox>
+            <ComboBox x:Name="QualityComboBox">
                 <ComboBoxItem Content="Hign"/>
                 <ComboBoxItem Content="Middle"/>
                 <ComboBoxItem Content="Low"/>
             </ComboBox>
             <Label Content="Format:"/>
-            <ComboBox>
+            <ComboBox x:Name="FormatComboBox">
                 <ComboBoxItem Content="A4"/>
                 <ComboBoxItem Content="A3"/>
                 <ComboBoxItem Content="Letter"/>
             </ComboBox>
-            <CheckBox Content="Double-sided printing
+            <CheckBox x:Name="DoubleSidedCheckBox" Content="Double-sided printing
 "/>
         </StackPanel>
     </Grid>

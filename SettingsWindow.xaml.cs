@@ -1,22 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Print_Server
 {
-    /// <summary>
-    /// Логика взаимодействия для SettingsWindow.xaml
-    /// </summary>
     public partial class SettingsWindow : Window
     {
         public string PrintQuality { get; set; }
@@ -26,12 +13,42 @@ namespace Print_Server
         public SettingsWindow()
         {
             InitializeComponent();
+            // Подписываемся на события изменения настроек
+            QualityComboBox.SelectionChanged += OnPrintSettingsChanged;
+            FormatComboBox.SelectionChanged += OnPrintSettingsChanged;
+            DoubleSidedCheckBox.Checked += OnPrintSettingsChanged;
+            DoubleSidedCheckBox.Unchecked += OnPrintSettingsChanged;
         }
 
-        private void OnPrintSettingsChanged(object sender, SelectionChangedEventArgs e)
+        private void OnPrintSettingsChanged(object sender, EventArgs e)
         {
-            // Здесь вы можете добавить логику для сохранения настроек печати
-            // Например, вы можете сохранить их в файл или в базу данных
+            // Сохранение настроек печати
+            ComboBoxItem qualityItem = (ComboBoxItem)QualityComboBox.SelectedItem;
+            PrintQuality = qualityItem.Content.ToString();
+
+            ComboBoxItem formatItem = (ComboBoxItem)FormatComboBox.SelectedItem;
+            PaperFormat = formatItem.Content.ToString();
+
+            IsDoubleSided = DoubleSidedCheckBox.IsChecked ?? false;
         }
+
+        // Метод для получения сохраненных настроек печати
+        public PrintSettings GetPrintSettings()
+        {
+            return new PrintSettings
+            {
+                Quality = PrintQuality,
+                Format = PaperFormat,
+                IsDoubleSided = IsDoubleSided
+            };
+        }
+    }
+
+    // Класс для хранения настроек печати
+    public class PrintSettings
+    {
+        public string Quality { get; set; }
+        public string Format { get; set; }
+        public bool IsDoubleSided { get; set; }
     }
 }

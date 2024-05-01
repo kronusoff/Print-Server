@@ -12,12 +12,14 @@ namespace Print_Server
     public partial class PrintDocumentWindow : Window
     {
         private string selectedPrinter;
+        private PrintSettings printSettings;
 
-        public PrintDocumentWindow(string printer)
+        public PrintDocumentWindow(string printer, PrintSettings settings)
         {
             InitializeComponent();
 
             selectedPrinter = printer;
+            printSettings = settings;
 
             this.AllowDrop = true;
             this.Drop += PrintDocumentWindow_Drop;
