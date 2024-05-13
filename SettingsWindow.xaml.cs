@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Drawing.Printing;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -6,49 +8,63 @@ namespace Print_Server
 {
     public partial class SettingsWindow : Window
     {
-        public string PrintQuality { get; set; }
-        public string PaperFormat { get; set; }
-        public bool IsDoubleSided { get; set; }
-
         public SettingsWindow()
         {
             InitializeComponent();
-            // Подписываемся на события изменения настроек
-            QualityComboBox.SelectionChanged += OnPrintSettingsChanged;
-            FormatComboBox.SelectionChanged += OnPrintSettingsChanged;
-            DoubleSidedCheckBox.Checked += OnPrintSettingsChanged;
-            DoubleSidedCheckBox.Unchecked += OnPrintSettingsChanged;
+
+            // Загрузка сохраненных настроек (если они есть)
+            LoadSettings();
         }
 
-        private void OnPrintSettingsChanged(object sender, EventArgs e)
+        private void LoadSettings()
         {
-            // Сохранение настроек печати
-            ComboBoxItem qualityItem = (ComboBoxItem)QualityComboBox.SelectedItem;
-            PrintQuality = qualityItem.Content.ToString();
+       
 
-            ComboBoxItem formatItem = (ComboBoxItem)FormatComboBox.SelectedItem;
-            PaperFormat = formatItem.Content.ToString();
-
-            IsDoubleSided = DoubleSidedCheckBox.IsChecked ?? false;
-        }
-
-        // Метод для получения сохраненных настроек печати
-        public PrintSettings GetPrintSettings()
-        {
-            return new PrintSettings
+            // Загрузка формата бумаги
+            string paperFormat = ConfigurationManager.AppSettings["PaperFormat"];
+            if (!string.IsNullOrEmpty(paperFormat))
             {
-                Quality = PrintQuality,
-                Format = PaperFormat,
-                IsDoubleSided = IsDoubleSided
-            };
-        }
-    }
+                foreach (ComboBoxItem item in FormatComboBox.Items)
+                {
+                    if (item.Content.ToString() == paperFormat)
+                    {
+                        FormatComboBox.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
 
-    // Класс для хранения настроек печати
-    public class PrintSettings
-    {
-        public string Quality { get; set; }
-        public string Format { get; set; }
-        public bool IsDoubleSided { get; set; }
+            // Загрузка двусторонней печати
+            string isDoubleSidedStr = ConfigurationManager.AppSettings["IsDoubleSided"];
+            bool isDoubleSided;
+            if (bool.TryParse(isDoubleSidedStr, out isDoubleSided))
+            {
+                DoubleSidedCheckBox.IsChecked = isDoubleSided;
+            }
+        }
+
+
+        private void SaveSettings()
+        {
+            // Сохранение качества печати
+        
+
+            // Сохранение формата бумаги
+            string selectedPaperFormat = FormatComboBox.SelectedItem?.ToString();
+            if (!string.IsNullOrEmpty(selectedPaperFormat))
+            {
+                ConfigurationManager.AppSettings["PaperFormat"] = selectedPaperFormat;
+            }
+
+            // Сохранение двусторонней печати
+            ConfigurationManager.AppSettings["IsDoubleSided"] = (DoubleSidedCheckBox.IsChecked ?? false).ToString();
+        }
+        
+        // Обработчик события закрытия окна
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Сохранение настроек перед закрытием окна
+            SaveSettings();
+        }
     }
 }

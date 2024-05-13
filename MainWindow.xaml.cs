@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Printing;
+using System.Drawing.Printing;
 
 namespace Print_Server
 {
@@ -33,14 +35,27 @@ namespace Print_Server
             if (selectedItem != null)
             {
                 string selectedPrinter = selectedItem.Content.ToString();
-                PrintDocumentWindow printDocumentWindow = new PrintDocumentWindow(selectedPrinter);
-                printDocumentWindow.ShowDialog();
+
+                // Проверяем доступность принтера
+                PrintQueue printQueue = LocalPrintServer.GetDefaultPrintQueue();
+                if (printQueue != null && printQueue.FullName == selectedPrinter)
+                {
+                    PrintDocumentWindow printDocumentWindow = new PrintDocumentWindow(selectedPrinter);
+                    printDocumentWindow.ShowDialog();
+                }
+                else
+                {
+                    MessageBox.Show("Принтер не подключен или недоступен.");
+                }
             }
             else
             {
-                MessageBox.Show("The printer is not selected!\r\n");
+                MessageBox.Show("Принтер не выбран!");
             }
         }
+
+
+
 
         private void RemovePrinter_Click(object sender, RoutedEventArgs e)
         {

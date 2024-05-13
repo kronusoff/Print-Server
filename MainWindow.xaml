@@ -8,6 +8,10 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Width" Value="80"/>
+            <!-- Фиксированная ширина -->
+            <Setter Property="Height" Value="30"/>
+            <!-- Фиксированная высота -->
             <!-- Adjusted font size -->
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Margin" Value="5"/>

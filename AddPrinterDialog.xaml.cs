@@ -18,17 +18,35 @@ namespace Print_Server
         }
         private void AddPrinterButton_Click(object sender, RoutedEventArgs e)
         {
-      
             if (PrintersComboBox.SelectedItem != null)
             {
-                SelectedPrinter = PrintersComboBox.SelectedItem as string;
-                DialogResult = true;
+                string selectedPrinterName = PrintersComboBox.SelectedItem as string;
+                LocalPrintServer printServer = new LocalPrintServer();
+                PrintQueue selectedPrintQueue = printServer.GetPrintQueue(selectedPrinterName);
+
+                if (selectedPrintQueue != null)
+                {
+                    if ((selectedPrintQueue.QueueStatus & PrintQueueStatus.Offline) == PrintQueueStatus.Offline)
+                    {
+                        MessageBox.Show("Selected printer is offline and cannot be added.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        SelectedPrinter = selectedPrinterName;
+                        DialogResult = true;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error retrieving information for the selected printer.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Select a printer from the list.\r\n", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Select a printer from the list.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

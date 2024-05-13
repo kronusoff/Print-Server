@@ -8,14 +8,8 @@
         Title="SettingsWindow" Height="450" Width="800">
     <Grid>
         <StackPanel>
-            <Label Content="Print Settings
-:" FontWeight="Bold"/>
-            <Label Content="Quality:"/>
-            <ComboBox x:Name="QualityComboBox">
-                <ComboBoxItem Content="Hign"/>
-                <ComboBoxItem Content="Middle"/>
-                <ComboBoxItem Content="Low"/>
-            </ComboBox>
+            <Label Content="Print Settings:" FontWeight="Bold"/>
+        
             <Label Content="Format:"/>
             <ComboBox x:Name="FormatComboBox">
                 <ComboBoxItem Content="A4"/>

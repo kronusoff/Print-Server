@@ -6,20 +6,20 @@ using System.Linq;
 using System.IO;
 using System.Windows.Xps;
 using System.Windows.Xps.Packaging;
+using System.Configuration;
 
 namespace Print_Server
 {
     public partial class PrintDocumentWindow : Window
     {
         private string selectedPrinter;
-        private PrintSettings printSettings;
 
-        public PrintDocumentWindow(string printer, PrintSettings settings)
+        public PrintDocumentWindow(string printer)
         {
             InitializeComponent();
 
             selectedPrinter = printer;
-            printSettings = settings;
+            ///printSettings = settings;
 
             this.AllowDrop = true;
             this.Drop += PrintDocumentWindow_Drop;
@@ -95,6 +95,23 @@ namespace Print_Server
                     return;
                 }
 
+      
+
+                // Получаем формат бумаги из конфигурационного файла
+                string paperFormat = ConfigurationManager.AppSettings["PaperFormat"];
+                if (!string.IsNullOrEmpty(paperFormat))
+                {
+                    printQueue.DefaultPrintTicket.PageMediaSize = new PageMediaSize(PageMediaSizeName.ISOA4);
+                }
+
+                // Получаем двустороннюю печать из конфигурационного файла
+                string isDoubleSidedStr = ConfigurationManager.AppSettings["IsDoubleSided"];
+                bool isDoubleSided;
+                if (bool.TryParse(isDoubleSidedStr, out isDoubleSided))
+                {
+                    printQueue.DefaultPrintTicket.Duplexing = isDoubleSided ? Duplexing.TwoSidedLongEdge : Duplexing.OneSided;
+                }
+
                 // Открываем и читаем содержимое файла
                 using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
                 {
@@ -118,7 +135,6 @@ namespace Print_Server
                 MessageBox.Show($"Error adding file to print queue: {ex.Message}");
             }
         }
-
     }
 }
 
