@@ -9,15 +9,37 @@
     <Grid>
         <StackPanel>
             <Label Content="Print Settings:" FontWeight="Bold"/>
-        
+
             <Label Content="Format:"/>
             <ComboBox x:Name="FormatComboBox">
                 <ComboBoxItem Content="A4"/>
                 <ComboBoxItem Content="A3"/>
                 <ComboBoxItem Content="Letter"/>
             </ComboBox>
-            <CheckBox x:Name="DoubleSidedCheckBox" Content="Double-sided printing
-"/>
+
+            <CheckBox x:Name="DoubleSidedCheckBox" Content="Double-sided printing"/>
+
+            <Label Content="Color Mode:"/>
+            <ComboBox x:Name="ColorModeComboBox">
+                <ComboBoxItem Content="Black and White"/>
+                <ComboBoxItem Content="Color"/>
+            </ComboBox>
+
+            <Label Content="Print Quality:"/>
+            <Slider x:Name="PrintQualitySlider" Minimum="0" Maximum="100" TickFrequency="10" Value="50" Width="150"/>
+
+            <Label Content="Paper Source:"/>
+            <ComboBox x:Name="PaperSourceComboBox">
+                <ComboBoxItem Content="Tray 1"/>
+                <ComboBoxItem Content="Tray 2"/>
+                <ComboBoxItem Content="Manual Feed"/>
+            </ComboBox>
+
+            <Label Content="Number of Copies:"/>
+            <TextBox x:Name="CopiesTextBox" Text="1" Width="50"/>
+
+            
+
         </StackPanel>
     </Grid>
 </Window>
