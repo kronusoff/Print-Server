@@ -80,7 +80,7 @@ namespace Print_Server
 
         private bool IsSupportedFileExtension(string extension)
         {
-            string[] supportedExtensions = { ".txt", ".doc", ".docx", ".pdf" }; 
+            string[] supportedExtensions = { ".txt", ".doc", ".docx", ".pdf" };
             return supportedExtensions.Contains(extension.ToLower());
         }
 
@@ -95,22 +95,14 @@ namespace Print_Server
                     return;
                 }
 
-      
-
-                // Получаем формат бумаги из конфигурационного файла
+                // Получаем настройки печати из конфигурационного файла
                 string paperFormat = ConfigurationManager.AppSettings["PaperFormat"];
-                if (!string.IsNullOrEmpty(paperFormat))
-                {
-                    printQueue.DefaultPrintTicket.PageMediaSize = new PageMediaSize(PageMediaSizeName.ISOA4);
-                }
+                bool isDoubleSided = ConfigurationManager.AppSettings["IsDoubleSided"] == "true";
+                int copies = int.Parse(ConfigurationManager.AppSettings["Copies"]);
+                string colorMode = ConfigurationManager.AppSettings["ColorMode"];
 
-                // Получаем двустороннюю печать из конфигурационного файла
-                string isDoubleSidedStr = ConfigurationManager.AppSettings["IsDoubleSided"];
-                bool isDoubleSided;
-                if (bool.TryParse(isDoubleSidedStr, out isDoubleSided))
-                {
-                    printQueue.DefaultPrintTicket.Duplexing = isDoubleSided ? Duplexing.TwoSidedLongEdge : Duplexing.OneSided;
-                }
+                // Устанавливаем полученные настройки печати
+                SetPrintSettings(printQueue.DefaultPrintTicket, paperFormat, isDoubleSided, copies, colorMode);
 
                 // Открываем и читаем содержимое файла
                 using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
@@ -135,6 +127,20 @@ namespace Print_Server
                 MessageBox.Show($"Error adding file to print queue: {ex.Message}");
             }
         }
+
+        private void SetPrintSettings(PrintTicket printTicket, string paperFormat, bool isDoubleSided, int copies, string colorMode)
+        {
+            if (!string.IsNullOrEmpty(paperFormat))
+            {
+                printTicket.PageMediaSize = new PageMediaSize(PageMediaSizeName.ISOA4);
+            }
+
+            printTicket.Duplexing = isDoubleSided ? Duplexing.TwoSidedLongEdge : Duplexing.OneSided;
+
+
+            printTicket.CopyCount = copies;
+
+            printTicket.OutputColor = (OutputColor)Enum.Parse(typeof(OutputColor), colorMode);
+        }
     }
 }
-

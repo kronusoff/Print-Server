@@ -1,5 +1,6 @@
-﻿using System.Windows;
-using System.Printing; 
+﻿using System;
+using System.Windows;
+using System.Printing;
 
 namespace Print_Server
 {
@@ -9,13 +10,31 @@ namespace Print_Server
 
         public AddPrinterDialog()
         {
-            InitializeComponent(); 
-            LocalPrintServer printServer = new LocalPrintServer();
-            foreach (var printQueue in printServer.GetPrintQueues())
+            InitializeComponent();
+            LoadPrinters();
+        }
+
+        private void LoadPrinters()
+        {
+            try
             {
-                PrintersComboBox.Items.Add(printQueue.Name);
+                LocalPrintServer printServer = new LocalPrintServer();
+                foreach (var printQueue in printServer.GetPrintQueues())
+                {
+                    // Проверяем доступность принтера перед добавлением в список
+                    if (!IsPrinterUnavailable(printQueue))
+                    {
+                        PrintersComboBox.Items.Add(printQueue.Name);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading printers: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
         private void AddPrinterButton_Click(object sender, RoutedEventArgs e)
         {
             if (PrintersComboBox.SelectedItem != null)
@@ -26,9 +45,10 @@ namespace Print_Server
 
                 if (selectedPrintQueue != null)
                 {
-                    if ((selectedPrintQueue.QueueStatus & PrintQueueStatus.Offline) == PrintQueueStatus.Offline)
+                    selectedPrintQueue.Refresh();
+                    if (IsPrinterUnavailable(selectedPrintQueue))
                     {
-                        MessageBox.Show("Selected printer is offline and cannot be added.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Selected printer is offline or not ready and cannot be added.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else
                     {
@@ -47,7 +67,31 @@ namespace Print_Server
             }
         }
 
+        private bool IsPrinterUnavailable(PrintQueue printQueue)
+        {
+            if (printQueue == null)
+                throw new ArgumentNullException(nameof(printQueue));
 
+            printQueue.Refresh();
+
+            // Combine multiple statuses that indicate the printer is unavailable
+            if ((printQueue.QueueStatus & PrintQueueStatus.Offline) == PrintQueueStatus.Offline ||
+                (printQueue.QueueStatus & PrintQueueStatus.PaperOut) == PrintQueueStatus.PaperOut ||
+                (printQueue.QueueStatus & PrintQueueStatus.DoorOpen) == PrintQueueStatus.DoorOpen ||
+                (printQueue.QueueStatus & PrintQueueStatus.Error) == PrintQueueStatus.Error ||
+                (printQueue.QueueStatus & PrintQueueStatus.NotAvailable) == PrintQueueStatus.NotAvailable ||
+                (printQueue.QueueStatus & PrintQueueStatus.NoToner) == PrintQueueStatus.NoToner ||
+                (printQueue.QueueStatus & PrintQueueStatus.OutOfMemory) == PrintQueueStatus.OutOfMemory ||
+                (printQueue.QueueStatus & PrintQueueStatus.PaperJam) == PrintQueueStatus.PaperJam ||
+                (printQueue.QueueStatus & PrintQueueStatus.OutputBinFull) == PrintQueueStatus.OutputBinFull ||
+                (printQueue.QueueStatus & PrintQueueStatus.PaperProblem) == PrintQueueStatus.PaperProblem ||
+                (printQueue.QueueStatus & PrintQueueStatus.UserIntervention) == PrintQueueStatus.UserIntervention)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
